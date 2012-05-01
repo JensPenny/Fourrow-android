@@ -9,6 +9,7 @@ import penny.fourrow.logic.GameFinishedEvent;
 import penny.fourrow.logic.GameFinishedListener;
 import penny.fourrow.logic.IGameControl;
 import penny.fourrow.logic.Player;
+import support.PointPair;
 import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -26,6 +27,9 @@ public class FourRowPMActivity extends Activity implements Observer, GameFinishe
 	
 	private static GameController controller = new GameController();
 	private boolean activityFirstStarted = false;
+	
+	private final PointPair pointPair = new PointPair();
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,12 +83,22 @@ public class FourRowPMActivity extends Activity implements Observer, GameFinishe
 					public boolean onTouch(View v, MotionEvent event) {
 						switch(event.getAction())
 						{
+						case MotionEvent.ACTION_UP:
+							//TODO: Motion event opvangen -> voorbeeldcode = http://www.ceveni.com/2009/08/android-gestures-detection-sample-code.html
+							pointPair.setSecondPoint((Point)v.getTag());
+							FourRowPMActivity.controller.getLogger().info("Recorded pointpair: " + pointPair.toString());
+							return true;
+						
 						case MotionEvent.ACTION_DOWN:
 							ImageView view = (ImageView)v;
 							FourRowPMActivity.controller.playerMakesMove((Point)v.getTag());
 							TextView playerLabel = (TextView)findViewById(R.id.lblPlayer);
 							playerLabel.setText(controller.getNextPlayer().name);
+							pointPair.setFirstPoint((Point)v.getTag());
 							return true;
+							
+						case MotionEvent.ACTION_CANCEL: //Opvangen foutieve cancels van actie door OS
+							return false;
 						default:
 							return false;
 						}

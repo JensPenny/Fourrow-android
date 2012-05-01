@@ -2,6 +2,7 @@ package penny.fourrow.logic;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import android.graphics.Point;
 
@@ -74,4 +75,8 @@ public class GameController implements IGameControl{
 		return running;
 	}
 	
+	public Logger getLogger(){
+		Logger logger = Logger.getLogger(GameController.class.toString());
+		return logger;
+	}
 }
