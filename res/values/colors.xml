@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="occupied">#171717</color>
+    <color name="free">#FFFFFF</color>
+    <color name="player1">#CD0000</color>
+    <color name="player2">#0099CC</color>
+    
+</resources>
