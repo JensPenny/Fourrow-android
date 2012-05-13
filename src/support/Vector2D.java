@@ -9,19 +9,21 @@ import android.graphics.Point;
  * Time: 20:14
  * To change this template use File | Settings | File Templates.
  */
-public class TwoDMathVector {
+public class Vector2D {
     private Point vector = new Point();
 
     private Point startPoint = new Point();
     private Point endPoint = new Point();
 
-    public TwoDMathVector(Point start, Point end){
+    public Vector2D(Point start, Point end){
         calculateVector(start, end);
     }
 
     private void calculateVector(Point startPoint, Point endPoint){
         vector.x = endPoint.x - startPoint.x;
         vector.y = endPoint.y - startPoint.y;
+
+        //TODO: velocity, derp
     }
 
     public Point get2DVector(){
@@ -36,7 +38,7 @@ public class TwoDMathVector {
     }
 
     /*
-    public void dotProduct(TwoDMathVector secondVector){
+    public void dotProduct(Vector2D secondVector){
         vector.x = vector.x * secondVector.get2DVector().x;
         vector.y = vector.y * secondVector.get2DVector().y;
     }

@@ -3,13 +3,10 @@ package penny.fourrow.viewlogic;
 import android.graphics.Point;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.TableLayout;
-import android.widget.Toast;
 import penny.fourrow.logic.GameController;
-import support.TwoDMathVector;
+import support.Vector2D;
 
-import java.util.Vector;
 import java.util.logging.Logger;
 
 /**
@@ -79,7 +76,7 @@ public class TableLayoutGestureListener implements GestureDetector.OnGestureList
             Point startPoint = calculateRowColumnFromRelativePixelPoint(new Point((int)e1.getX(), (int)e1.getY()));
             Point endPoint = calculateRowColumnFromRelativePixelPoint(new Point((int)e2.getX(), (int)e2.getY()));
 
-            TwoDMathVector vector = new TwoDMathVector(startPoint, endPoint);
+            Vector2D vector = new Vector2D(startPoint, endPoint);
             if (Math.abs(vector.get2DVector().x) > Math.abs(vector.get2DVector().y)){
                 if (vector.get2DVector().x > 0){
                     log.info("LeftToRight swipe");
