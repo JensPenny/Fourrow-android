@@ -1,0 +1,5 @@
+<resources>
+    <integer name="AmountColRows">
+        9
+    </integer>
+</resources>

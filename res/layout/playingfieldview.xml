@@ -13,7 +13,7 @@
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Player:"
+            android:text="Player: "
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
@@ -25,21 +25,45 @@
 
     </LinearLayout>
 
-    <TableLayout
-        android:id="@+id/tblPlayingField"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-       
-         >
-    </TableLayout>
 
-    <TextView
-        android:id="@+id/lblPlayer2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Speler 2"
-        android:textAppearance="?android:attr/textAppearanceLarge" 
-        android:paddingBottom="2dp"
-        />
+    <RelativeLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
 
+        <TableLayout
+            android:id="@+id/tblPlayingField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+             >
+        </TableLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+            android:id="@+id/player2container"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:id="@+id/textViewpl2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Player: "
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/lblPlayer2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Speler 2"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:paddingBottom="2dp"
+            />
+
+    </LinearLayout>
 </LinearLayout>

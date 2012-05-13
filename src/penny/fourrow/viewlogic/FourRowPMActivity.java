@@ -2,15 +2,12 @@ package penny.fourrow.viewlogic;
 
 import java.util.Observable;
 import java.util.Observer;
-import java.util.logging.Logger;
 
-import android.gesture.GestureOverlayView;
 import android.view.GestureDetector;
 import penny.fourrow.activity.R;
 import penny.fourrow.logic.GameController;
 import penny.fourrow.logic.GameFinishedEvent;
 import penny.fourrow.logic.GameFinishedListener;
-import penny.fourrow.logic.IGameControl;
 import penny.fourrow.logic.Player;
 import support.PointPair;
 import android.app.Activity;
@@ -19,11 +16,9 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class FourRowPMActivity extends Activity implements Observer, GameFinishedListener {
@@ -34,36 +29,38 @@ public class FourRowPMActivity extends Activity implements Observer, GameFinishe
 	private final PointPair pointPair = new PointPair();
 
     private GestureDetector detector;
-    private TableLayout playingfield;
-    View.OnTouchListener touchListener;
-	
+    TableLayoutGestureListener gestureListener;
+    private TableLayout playingFieldView;
+
+    private View.OnTouchListener touchListener = new OnTouchListener(){
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            return detector.onTouchEvent(motionEvent);
+        }
+    };
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.playingfieldview);
-        playingfield = (TableLayout)findViewById(R.id.tblPlayingField);
+        playingFieldView = (TableLayout)findViewById(R.id.tblPlayingField);
         buildPlayingField();
         
         //TODO: refactor naar iets dynamisch
         controller.getPlayingField().initializeFirstMove(new Point(4,4), R.color.occupied);
 
-        detector = new GestureDetector(new FlingGestureListener()); //TODO:callback handlen
+        //Gesturedetector initialiseren adhv gerenderde playingFieldView + listener setten
+        gestureListener = new TableLayoutGestureListener(playingFieldView, controller); //Must be able to do moves. In dire need of a refactor
+        detector = new GestureDetector(gestureListener); //TODO:callback handlen
+        playingFieldView.setOnTouchListener(touchListener);
 
-        touchListener = new OnTouchListener(){
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return detector.onTouchEvent(motionEvent);
-            }
-        };
-
-        playingfield.setOnTouchListener(touchListener);
     }
-    
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-    	if (!activityFirstStarted && hasFocus){
+    	if (!activityFirstStarted && hasFocus){ //WARNING: won't update relative cell size when app stays but window changes
     		controller.getPlayingField().addGameFinishedListener(this);
+            gestureListener.recalculateRelativeCellSize();
     		activityFirstStarted = true;
     	}
     }
@@ -79,7 +76,7 @@ public class FourRowPMActivity extends Activity implements Observer, GameFinishe
     	controller.initNewGame(rows, columns); //Initialiseert de gamecontroller
     	controller.getPlayingField().addObserver(this);
     	controller.startGame();
-    	createPlayingFieldView(playingfield, rows, columns);
+    	createPlayingFieldView(playingFieldView, rows, columns);
     }
     private void createPlayingFieldView(TableLayout layout, int rows, int columns)
     {
@@ -92,19 +89,17 @@ public class FourRowPMActivity extends Activity implements Observer, GameFinishe
 				button.setPadding(0, 0, 0, 0);
 				button.setImageResource(R.drawable.emptycell);
 				button.setTag(new Point(j, i));
+                button.setClickable(false);
 				row.addView(button);
-
-                button.setOnTouchListener(touchListener);
 			}
 			layout.addView(row);
 		}
-
     }
 
 	@Override
 	public void update(Observable observable, Object data) {
 		Point p = (Point)data;
-		TableRow row = (TableRow)playingfield.getChildAt(p.y);
+		TableRow row = (TableRow) playingFieldView.getChildAt(p.y);
 		ImageView v = (ImageView)row.getChildAt(p.x);
 		v.setImageResource(controller.getPlayingField().gameField[p.x][p.y]);
 	}
