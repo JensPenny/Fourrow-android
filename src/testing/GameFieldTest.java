@@ -47,7 +47,7 @@ public class GameFieldTest extends TestCase {
         assertEquals(grabValue, 0);
     }
 
-    public void testGetFirstPointOnRow() throws Exception {
+    public void testGetFirstPointOnColumn() throws Exception {
         Point grabValue = gameField.getFirstPointOnColumn(4);
         assertEquals(grabValue, middle);
         grabValue = gameField.getFirstPointOnColumn(validMove.x); //column, moet valid move zijn
@@ -58,14 +58,14 @@ public class GameFieldTest extends TestCase {
         assertEquals(grabValue, 0);
     }
 
-    public void testGetFirstPointOnColumn() throws Exception {
-        Point grabValue = gameField.getFirstPointOnColumn(4);
+    public void testGetFirstPointOnRow() throws Exception {
+        Point grabValue = gameField.getFirstPointOnRow(4);
         assertEquals(grabValue, middle);
-        grabValue = gameField.getFirstPointOnColumn(validMove.x); //column, moet valid move zijn
+        grabValue = gameField.getFirstPointOnRow(validMove.x); //column, moet valid move zijn
         assertEquals(grabValue, middle);
-        grabValue = gameField.getFirstPointOnColumn(0);
+        grabValue = gameField.getFirstPointOnRow(0);
         assertEquals(grabValue, 0);
-        grabValue = gameField.getFirstPointOnColumn(8);
+        grabValue = gameField.getFirstPointOnRow(8);
         assertEquals(grabValue, 0);
     }
 

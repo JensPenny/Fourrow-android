@@ -76,15 +76,24 @@ public class GameField extends Observable{
 		return false;
 	}
 
+    //X = column, Y = row!!!
     public Point getFirstPointOnRow(int rowIndex){
-        Point foundPoint = new Point();
-
-        return foundPoint;
+        for (int i = 0; i < gameField.length; i++){
+            Point testedPoint = new Point(i, rowIndex);
+            if (getValueAtPosition(testedPoint) != 0){
+                return testedPoint;
+            }
+        }
+        return null; //Of new point ???
     }
     public Point getFirstPointOnColumn(int columnIndex){
-        Point foundPoint = new Point();
-
-        return foundPoint;
+        for (int i = 0; i < gameField.length; i++){
+            Point testedPoint = new Point(columnIndex, i);
+            if (getValueAtPosition(testedPoint) != 0){
+                return testedPoint;
+            }
+        }
+        return null;
     }
 
 	@Override
