@@ -4,9 +4,10 @@ import java.util.Observable;
 
 import android.graphics.Point;
 
+//TODO: Generics :D
 public class GameField extends Observable{
 	
-	public int[][] gameField;
+	private int[][] gameField;
 	private EventListenerList endingListenerList = new EventListenerList();
 	
 	public void addGameFinishedListener(GameFinishedListener listener){
@@ -16,6 +17,10 @@ public class GameField extends Observable{
 	public void removeGameFinishedListener(GameFinishedListener listener){
 		endingListenerList.remove(GameFinishedListener.class, listener);
 	}
+
+    public int getValueAtPosition(Point position){
+        return gameField[position.x][position.y];
+    }
 	
 	private void fireGameFinishedEvent(GameFinishedEvent evt)
 	{
@@ -29,15 +34,15 @@ public class GameField extends Observable{
 	
 	public GameField(int rows, int columns){
 		gameField = new int[rows][columns];
-		resetGameField(rows, columns);
+		resetGameField();
 	}
 	
-	public void resetGameField(int rows, int columns)
+	public void resetGameField()
 	{
 		//Initialiseer het veld
-		for (int i = 0; i < rows; i++)
+		for (int i = 0; i < gameField.length; i++)
 		{
-			for (int j = 0; j < rows; j++)
+			for (int j = 0; j < gameField[i].length; j++)
 			{
 				gameField[i][j] = 0;
 			}
@@ -55,7 +60,8 @@ public class GameField extends Observable{
 			this.notifyObservers(coords);
 		}
 	}
-	
+
+    //TODO: Moet gerefactored worden met inclusie van animatieframework
 	public boolean doMove(Point coords, int value)
 	{
 		if (gameField[coords.x][coords.y] == 0 && checkValidNeighbours(coords)){
@@ -69,6 +75,17 @@ public class GameField extends Observable{
 		}
 		return false;
 	}
+
+    public Point getFirstPointOnRow(int rowIndex){
+        Point foundPoint = new Point();
+
+        return foundPoint;
+    }
+    public Point getFirstPointOnColumn(int columnIndex){
+        Point foundPoint = new Point();
+
+        return foundPoint;
+    }
 
 	@Override
 	public void notifyObservers(Object coords) {
@@ -109,90 +126,6 @@ public class GameField extends Observable{
 			hasWon = this.checkRisingDiagonalWinner(start, baseValue);
 		if (!hasWon)
 			hasWon = this.checkFallingDiagonalWinner(start, baseValue);
-//		Point current = start;
-//		int counter = 1;
-//		
-//		//Check horizontal
-//		current.x = current.x + 1;
-//		//Check to the left
-//		while (gameField[current.x][current.y] == baseValue){
-//			counter++;
-//			current.x = current.x+1;
-//		}
-//		//Check to the right
-//		current = start;
-//		current.x = current.x - 1;
-//		while(gameField[current.x][current.y] == baseValue){
-//			counter++;
-//			current.x = current.x -1;
-//		}
-//		if (counter >= 4)
-//			return true;
-//		
-//		//Vertical
-//		current = start;
-//		counter = 1;
-//		current.y = current.y + 1;
-//		while(gameField[current.x][current.y] == baseValue){
-//			counter++;
-//			current.y = current.y + 1;
-//		}
-//		current = start;
-//		current.y = current.y - 1;
-//		while(gameField[current.x][current.y] == baseValue){
-//			counter++;
-//			current.y = current.y - 1;
-//		}
-//		
-//		if (counter >= 4)
-//			return true;
-//		
-//		//Diagonal
-//		counter = 1;
-//		current = start;
-//		current.x = current.x + 1;
-//		current.y = current.y +1;
-//		//Check to the left
-//		while (gameField[current.x][current.y] == baseValue){
-//			counter++;
-//			current.x = current.x+1;
-//			current.y = current.y + 1;
-//		}
-//		//Check to the right
-//		current = start;
-//		current.x = current.x - 1;
-//		current.y = current.y - 1;
-//		while(gameField[current.x][current.y] == baseValue){
-//			counter++;
-//			current.x = current.x -1;
-//			current.y = current.y - 1;
-//		}
-//		if (counter >= 4)
-//			return true;
-//		
-//		//Diagonal
-//		counter = 1;
-//		current = start;
-//		current.x = current.x + 1;
-//		current.y = current.y -1;
-//		//Check to the left
-//		while (gameField[current.x][current.y] == baseValue){
-//			counter++;
-//			current.x = current.x+1;
-//			current.y = current.y - 1;
-//		}
-//		//Check to the right
-//		current = start;
-//		current.x = current.x - 1;
-//		current.y = current.y + 1;
-//		while(gameField[current.x][current.y] == baseValue){
-//			counter++;
-//			current.x = current.x -1;
-//			current.y = current.y + 1;
-//		}
-//		if (counter >= 4)
-//			return true;
-		
 		return hasWon;
 	}
 	

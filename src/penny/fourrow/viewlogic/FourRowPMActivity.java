@@ -101,7 +101,7 @@ public class FourRowPMActivity extends Activity implements Observer, GameFinishe
 		Point p = (Point)data;
 		TableRow row = (TableRow) playingFieldView.getChildAt(p.y);
 		ImageView v = (ImageView)row.getChildAt(p.x);
-		v.setImageResource(controller.getPlayingField().gameField[p.x][p.y]);
+		v.setImageResource(controller.getPlayingField().getValueAtPosition(p));
 	}
 
 	@Override
@@ -109,6 +109,6 @@ public class FourRowPMActivity extends Activity implements Observer, GameFinishe
 		Player winner = controller.getNextPlayer();
 		Toast t = Toast.makeText(getApplicationContext(), "Winner! Congratulations " + winner.name, Toast.LENGTH_LONG);
 		t.show();
-		controller.getPlayingField().resetGameField(9, 9);
+		controller.getPlayingField().resetGameField();
 	}
 }
