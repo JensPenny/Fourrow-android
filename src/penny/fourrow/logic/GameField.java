@@ -76,21 +76,52 @@ public class GameField extends Observable{
 		return false;
 	}
 
+    public Point getFirstEncounteredPoint(int rowColIndex, Direction direction){
+        Point result;
+        if (direction == Direction.LEFTTORIGHT || direction == Direction.RIGHTTOLEFT)
+        {
+            result = getFirstPointOnRow(rowColIndex, direction);
+        }
+        else {
+            result = getFirstPointOnColumn(rowColIndex, direction);
+        }
+        return result;
+    }
+
     //X = column, Y = row!!!
-    public Point getFirstPointOnRow(int rowIndex){
-        for (int i = 0; i < gameField.length; i++){
-            Point testedPoint = new Point(i, rowIndex);
-            if (getValueAtPosition(testedPoint) != 0){
-                return testedPoint;
+    private Point getFirstPointOnRow(int rowIndex, Direction direction){
+        if (direction == Direction.LEFTTORIGHT){
+            for (int i = 0; i < gameField.length; i++){
+                Point testedPoint = new Point(i , rowIndex);
+                if (getValueAtPosition(testedPoint) != 0){
+                    return testedPoint;
+                }
+            }
+        }else if (direction == Direction.RIGHTTOLEFT){
+            for (int i = gameField.length-1; i >=0; i--){
+                Point testedPoint = new Point(i , rowIndex);
+                if (getValueAtPosition(testedPoint) != 0){
+                    return testedPoint;
+                }
             }
         }
         return null; //Of new point ???
     }
-    public Point getFirstPointOnColumn(int columnIndex){
-        for (int i = 0; i < gameField.length; i++){
-            Point testedPoint = new Point(columnIndex, i);
-            if (getValueAtPosition(testedPoint) != 0){
-                return testedPoint;
+    private Point getFirstPointOnColumn(int columnIndex, Direction direction){
+
+        if (direction == Direction.UPWARDS){
+            for (int i = gameField.length-1; i >=0; i--){
+                Point testedPoint = new Point(columnIndex, i);
+                if (getValueAtPosition(testedPoint) != 0){
+                    return testedPoint;
+                }
+            }
+        }else if (direction == Direction.DOWNWARDS){
+            for (int i = 0; i < gameField.length; i++){
+                Point testedPoint = new Point(columnIndex, i);
+                if (getValueAtPosition(testedPoint) != 0){
+                    return testedPoint;
+                }
             }
         }
         return null;

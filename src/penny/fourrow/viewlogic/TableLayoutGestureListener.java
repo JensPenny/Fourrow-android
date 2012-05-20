@@ -4,6 +4,7 @@ import android.graphics.Point;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.TableLayout;
+import penny.fourrow.logic.Direction;
 import penny.fourrow.logic.GameController;
 import support.Vector2D;
 
@@ -70,6 +71,7 @@ public class TableLayoutGestureListener implements GestureDetector.OnGestureList
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    //TODO: refactor + settings
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         try {
@@ -77,43 +79,51 @@ public class TableLayoutGestureListener implements GestureDetector.OnGestureList
             Point endPoint = calculateRowColumnFromRelativePixelPoint(new Point((int)e2.getX(), (int)e2.getY()));
 
             Vector2D vector = new Vector2D(startPoint, endPoint);
+
+            Point firstEncounteredPoint;
             if (Math.abs(vector.get2DVector().x) > Math.abs(vector.get2DVector().y)){
                 if (vector.get2DVector().x > 0){
                     log.info("LeftToRight swipe");
                     log.info("On row: " + (startPoint.y + vector.get2DVector().y/2));
-
+                    int row = startPoint.y + vector.get2DVector().y/2;
+                    firstEncounteredPoint = controller.getPlayingField().getFirstEncounteredPoint(row, Direction.LEFTTORIGHT);
+                    if (firstEncounteredPoint.x >= 1){
+                        firstEncounteredPoint.x -= 1;
+                        controller.playerMakesMove(firstEncounteredPoint);
+                    }
                 }else
                 {
                     log.info("RightToLeft swipe");
                     log.info("On row: " + (startPoint.y + vector.get2DVector().y/2));
+                    int row = startPoint.y + vector.get2DVector().y/2;
+                    firstEncounteredPoint = controller.getPlayingField().getFirstEncounteredPoint(row, Direction.RIGHTTOLEFT);
+                    firstEncounteredPoint.x += 1;
+                    if (firstEncounteredPoint.x < 9){ //Test of dit punt op de border ligt -> TODO: refactor
+                        controller.playerMakesMove(firstEncounteredPoint);
+                    }
                 }
             }else{
                 if (vector.get2DVector().y > 0){
                     log.info("TopToBot swipe");
                     log.info("On column: " + (startPoint.x + vector.get2DVector().x/2));
+                    int column = startPoint.x + vector.get2DVector().x/2;
+                    firstEncounteredPoint = controller.getPlayingField().getFirstEncounteredPoint(column, Direction.DOWNWARDS);
+                    firstEncounteredPoint.y -= 1;
+                    if(firstEncounteredPoint.y >= 0){
+                        controller.playerMakesMove(firstEncounteredPoint);
+                    }
                 }else {
                     log.info("BotToTop swipe");
                     log.info("On column: " +(startPoint.x + vector.get2DVector().x/2));
+                    int column = startPoint.x + vector.get2DVector().x/2;
+                    firstEncounteredPoint = controller.getPlayingField().getFirstEncounteredPoint(column, Direction.UPWARDS);
+                    firstEncounteredPoint.y += 1;
+                    if (firstEncounteredPoint.y < 9){
+                        controller.playerMakesMove(firstEncounteredPoint);
+                    }
                 }
 
             }
-            controller.playerMakesMove(startPoint);
-            /*
-            if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
-                return false;
-            // right to left swipe
-            if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                return true;
-            }  else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                log.info("Right swipe");
-                return true;
-            } else if (e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY){
-                log.info("Bottomup swipe");
-                return true;
-            }  else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY){
-                log.info("Toptodown swipe");
-                return true;
-            }    */
         } catch (Exception e) {
             // nothing
         }
