@@ -5,7 +5,6 @@ import android.graphics.Point;
 public interface IGameControl {
 	public void startGame();
 	public Player getNextPlayer();
-	public GameField getPlayingField();
 	public boolean isGameRunning();
 	
 	public void addPlayer(Player player);

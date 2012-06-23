@@ -1,11 +1,15 @@
-package penny.fourrow.logic;
+package penny.fourrow.gamefield;
 
 import java.util.Observable;
 
 import android.graphics.Point;
+import penny.fourrow.logic.Direction;
+import penny.fourrow.logic.EventListenerList;
+import penny.fourrow.logic.GameFinishedEvent;
+import penny.fourrow.logic.GameFinishedListener;
 
-//TODO: Generics :D
-public class GameField extends Observable{
+//Package level
+class GameFieldLogic extends Observable{
 	
 	private int[][] gameField;
 	private EventListenerList endingListenerList = new EventListenerList();
@@ -32,7 +36,7 @@ public class GameField extends Observable{
 		}
 	}
 	
-	public GameField(int rows, int columns){
+	public GameFieldLogic(int rows, int columns){
 		gameField = new int[rows][columns];
 		resetGameField();
 	}

@@ -4,10 +4,7 @@ package penny.fourrow.viewlogic;
 import android.app.Activity;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
-import android.view.View;
-import android.view.animation.Animation;
 import android.widget.ImageView;
-import penny.fourrow.activity.R;
 
 /**
  * Created with IntelliJ IDEA.

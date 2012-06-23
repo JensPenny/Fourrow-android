@@ -5,24 +5,28 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import android.graphics.Point;
+import penny.fourrow.gamefield.GameFieldView;
 
 public class GameController implements IGameControl{
 
 	private List<Player> playerList;
 	public Player nextPlayer;
-	public GameField gameField;
 	public boolean running = false;
+    private GameFieldView gameFieldView;
+    public static GameController INSTANCE = new GameController();
 	
-	public GameController()
+	private GameController()
 	{
 		playerList = new LinkedList<Player>();
 		nextPlayer = null;
-		gameField = new GameField(0, 0);
 	}
+
+    public void setGameFieldView(GameFieldView gameField){
+        this.gameFieldView = gameField;
+    }
 	
 	public void initNewGame(int rows, int columns)
 	{
-		gameField = new GameField(rows, columns);
 		for (Player player : playerList) {
 			//player.score = 0;
 		}
@@ -48,7 +52,7 @@ public class GameController implements IGameControl{
 	{
 		if (running)
 		{
-			if (gameField.doMove(coords, nextPlayer.playerColorResource))
+			if (gameFieldView.doMove(coords, nextPlayer))
 			{
 				int index = playerList.indexOf(nextPlayer);
 				if (playerList.size() == index + 1)
@@ -63,11 +67,6 @@ public class GameController implements IGameControl{
 
 	public Player getNextPlayer() {
 		return nextPlayer;
-	}
-
-	@Override
-	public GameField getPlayingField() {
-		return gameField;
 	}
 
 	@Override

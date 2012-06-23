@@ -3,7 +3,7 @@ package penny.fourrow.viewlogic;
 import android.graphics.Point;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.widget.TableLayout;
+import penny.fourrow.gamefield.GameFieldView;
 import penny.fourrow.logic.Direction;
 import penny.fourrow.logic.GameController;
 import support.Vector2D;
@@ -23,19 +23,17 @@ public class TableLayoutGestureListener implements GestureDetector.OnGestureList
     private static final int SWIPE_MAX_OFF_PATH = 250;
     private static final int SWIPE_THRESHOLD_VELOCITY = 200;
 
-    private TableLayout table;
-    private GameController controller;
+    private GameFieldView gameField;
     private Logger log = Logger.getLogger("GestureLogger");
     private int pixelsPerCell = 0; //Amount of pixels one cell has - width and height should be the same
 
-    public TableLayoutGestureListener(TableLayout table, GameController controller){ //GAMECONTROLLER NEEDS A REFACTOR
-        this.table = table;
+    public TableLayoutGestureListener(GameFieldView gameField){
+        this.gameField = gameField;
         recalculateRelativeCellSize();
-        this.controller = controller;
     }
 
     public void recalculateRelativeCellSize(){
-        int width = table.getWidth();
+        int width = gameField.getConstructedGameFieldTableLayout().getWidth();
         pixelsPerCell = width / 9; //TODO: preferences steken
     }
 
@@ -86,20 +84,20 @@ public class TableLayoutGestureListener implements GestureDetector.OnGestureList
                     log.info("LeftToRight swipe");
                     log.info("On row: " + (startPoint.y + vector.get2DVector().y/2));
                     int row = startPoint.y + vector.get2DVector().y/2;
-                    firstEncounteredPoint = controller.getPlayingField().getFirstEncounteredPoint(row, Direction.LEFTTORIGHT);
+                    firstEncounteredPoint = gameField.getFirstEncounteredPoint(row, Direction.LEFTTORIGHT);
                     if (firstEncounteredPoint.x >= 1){
                         firstEncounteredPoint.x -= 1;
-                        controller.playerMakesMove(firstEncounteredPoint);
+                        GameController.INSTANCE.playerMakesMove(firstEncounteredPoint);
                     }
                 }else
                 {
                     log.info("RightToLeft swipe");
                     log.info("On row: " + (startPoint.y + vector.get2DVector().y/2));
                     int row = startPoint.y + vector.get2DVector().y/2;
-                    firstEncounteredPoint = controller.getPlayingField().getFirstEncounteredPoint(row, Direction.RIGHTTOLEFT);
+                    firstEncounteredPoint = gameField.getFirstEncounteredPoint(row, Direction.RIGHTTOLEFT);
                     firstEncounteredPoint.x += 1;
                     if (firstEncounteredPoint.x < 9){ //Test of dit punt op de border ligt -> TODO: refactor
-                        controller.playerMakesMove(firstEncounteredPoint);
+                        GameController.INSTANCE.playerMakesMove(firstEncounteredPoint);
                     }
                 }
             }else{
@@ -107,19 +105,19 @@ public class TableLayoutGestureListener implements GestureDetector.OnGestureList
                     log.info("TopToBot swipe");
                     log.info("On column: " + (startPoint.x + vector.get2DVector().x/2));
                     int column = startPoint.x + vector.get2DVector().x/2;
-                    firstEncounteredPoint = controller.getPlayingField().getFirstEncounteredPoint(column, Direction.DOWNWARDS);
+                    firstEncounteredPoint = gameField.getFirstEncounteredPoint(column, Direction.DOWNWARDS);
                     firstEncounteredPoint.y -= 1;
                     if(firstEncounteredPoint.y >= 0){
-                        controller.playerMakesMove(firstEncounteredPoint);
+                        GameController.INSTANCE.playerMakesMove(firstEncounteredPoint);
                     }
                 }else {
                     log.info("BotToTop swipe");
                     log.info("On column: " +(startPoint.x + vector.get2DVector().x/2));
                     int column = startPoint.x + vector.get2DVector().x/2;
-                    firstEncounteredPoint = controller.getPlayingField().getFirstEncounteredPoint(column, Direction.UPWARDS);
+                    firstEncounteredPoint = gameField.getFirstEncounteredPoint(column, Direction.UPWARDS);
                     firstEncounteredPoint.y += 1;
                     if (firstEncounteredPoint.y < 9){
-                        controller.playerMakesMove(firstEncounteredPoint);
+                        GameController.INSTANCE.playerMakesMove(firstEncounteredPoint);
                     }
                 }
 
