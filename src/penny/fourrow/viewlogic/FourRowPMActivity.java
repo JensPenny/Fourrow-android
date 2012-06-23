@@ -31,6 +31,7 @@ public class FourRowPMActivity extends Activity implements Observer, GameFinishe
     private GestureDetector detector;
     TableLayoutGestureListener gestureListener;
     private TableLayout playingFieldView;
+    private AnimationHandler animationHandler;
 
     private View.OnTouchListener touchListener = new OnTouchListener(){
         @Override
@@ -53,6 +54,8 @@ public class FourRowPMActivity extends Activity implements Observer, GameFinishe
         gestureListener = new TableLayoutGestureListener(playingFieldView, controller); //Must be able to do moves. In dire need of a refactor
         detector = new GestureDetector(gestureListener); //TODO:callback handlen
         playingFieldView.setOnTouchListener(touchListener);
+
+        animationHandler = new AnimationHandler(this);
 
     }
 

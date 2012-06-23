@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<animation-list xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/animplayer1">
-    <item android:drawable="@drawable/p1cell" android:duration="50" />
-    
-   
-
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/p2anim_frame1" android:duration="50"/>
+    <item android:drawable="@drawable/p2anim_frame2" android:duration="50"/>
+    <item android:drawable="@drawable/p2cell" android:duration="50" />
+    <item android:drawable="@drawable/p2anim_frame4" android:duration="50"/>
+    <item android:drawable="@drawable/p2anim_frame5" android:duration="50"/>
 </animation-list>
