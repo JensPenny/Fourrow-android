@@ -1,5 +1,8 @@
 package penny.fourrow.viewlogic;
 
+import android.graphics.drawable.AnimationDrawable;
+import android.view.View;
+import android.widget.*;
 import penny.fourrow.gamefield.GameFieldView;
 import penny.fourrow.logic.GameController;
 import penny.fourrow.logic.GameFinishedEvent;
@@ -8,8 +11,6 @@ import penny.fourrow.logic.Player;
 import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.widget.TableLayout;
-import android.widget.Toast;
 
 public class FourRowPMActivity extends Activity implements GameFinishedListener {
 	
@@ -17,7 +18,6 @@ public class FourRowPMActivity extends Activity implements GameFinishedListener 
 	private boolean activityFirstStarted = false;
 
     private GameFieldView gameFieldView;
-    private AnimationHandler animationHandler;
 
     /** Called when the activity is first created. */
     @Override
@@ -25,8 +25,28 @@ public class FourRowPMActivity extends Activity implements GameFinishedListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.playingfieldview);
         initializeController();
-        animationHandler = new AnimationHandler(this);
+        initializeTests();
+    }
 
+    private void initializeTests() {
+        LinearLayout lolout = (LinearLayout)findViewById(R.id.player2container);
+        Button b = new Button(this);
+        b.setWidth(100);
+        b.setHeight(50);
+        b.setText("Animatie");
+        ImageView v = new ImageView(this);
+        v.setBackgroundResource(R.drawable.animate_player1);
+        final AnimationDrawable drawable = (AnimationDrawable)v.getBackground();
+        drawable.setOneShot(true);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawable.stop();
+                drawable.start();
+            }
+        });
+        lolout.addView(b);
+        lolout.addView(v);
     }
 
     @Override

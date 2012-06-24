@@ -48,11 +48,11 @@ public class GameController implements IGameControl{
 		running = true;
 	}
 	
-	public void playerMakesMove(Point coords)
+	public void playerMakesMove(Point coords, Direction direction)
 	{
 		if (running)
 		{
-			if (gameFieldView.doMove(coords, nextPlayer))
+			if (gameFieldView.doMove(coords, direction, nextPlayer))
 			{
 				int index = playerList.indexOf(nextPlayer);
 				if (playerList.size() == index + 1)

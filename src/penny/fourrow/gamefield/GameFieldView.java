@@ -12,8 +12,9 @@ import penny.fourrow.logic.GameFinishedListener;
 import penny.fourrow.logic.Player;
 import penny.fourrow.viewlogic.FourRowBasicParameters;
 import penny.fourrow.viewlogic.R;
-import penny.fourrow.viewlogic.TableLayoutGestureListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -31,7 +32,10 @@ public class GameFieldView implements Observer {
     //Klassen voor gesturedetectie
     private GestureDetector gestureDetector;
     //Listener die aan deze view gekoppeld is
-    TableLayoutGestureListener gestureListener;
+    GameFieldGestureListener gestureListener;
+
+    //Animaties
+    GameFieldAnimationHandler animationHandler;
 
     public GameFieldView(TableLayout viewById){
         tableLayout = viewById;
@@ -71,10 +75,12 @@ public class GameFieldView implements Observer {
         createPlayingFieldView();
 
         //Setup the gesturemanager
-        gestureListener = new TableLayoutGestureListener(this); //Must be able to do moves. In dire need of a refactor
+        gestureListener = new GameFieldGestureListener(this); //Must be able to do moves. In dire need of a refactor
         gestureDetector = new GestureDetector(gestureListener); //TODO:callback handlen
         tableLayout.setOnTouchListener(touchListener);
         gestureListener.recalculateRelativeCellSize();
+
+        animationHandler = new GameFieldAnimationHandler();
     }
 
     private void createPlayingFieldView()
@@ -110,7 +116,7 @@ public class GameFieldView implements Observer {
         }
     };
 
-    //WARNING, SMELLS
+    //WARNING, SMELLS - Stuur naar een GameField die beslist wat er in de view en wat er in de logic moet gebeuren
     public Point getFirstEncounteredPoint(int row, Direction direction){
         return linkedGameFieldLogic.getFirstEncounteredPoint(row, direction);
     }
@@ -123,8 +129,60 @@ public class GameFieldView implements Observer {
         linkedGameFieldLogic.initializeFirstMove(point, occupied);
     }
 
-    public boolean doMove(Point coords, Player player){
+    public boolean doMove(Point coords, Direction direction, Player player){
+        //Check of move mag
+        //Doe animatie
+        animationHandler.doAnimation(getAllViewsToPoint(coords, direction), direction, player);
+        //Doe effectieve move
         return linkedGameFieldLogic.doMove(coords, player.playerColorResource);
+    }
+
+    //TODO: refactor
+    private List<ImageView> getAllViewsToPoint(Point coords, Direction direction) {
+        List<ImageView> viewList = new ArrayList<ImageView>();
+        switch (direction) {
+            case DOWNWARDS:
+                int startAtY = 0;
+                int endY = coords.y;
+                while (startAtY <= endY){
+                    TableRow currentRow = (TableRow)tableLayout.getChildAt(startAtY);
+                    ImageView currentRowColumnView = (ImageView)currentRow.getChildAt(coords.x);
+                    viewList.add(currentRowColumnView);
+                    startAtY++;
+                }
+                break;
+            case UPWARDS:
+                startAtY = amountRows - 1;
+                endY = coords.y;
+                while (startAtY >= endY){
+                    TableRow currentRow = (TableRow)tableLayout.getChildAt(startAtY);
+                    ImageView currentRowColumnView = (ImageView)currentRow.getChildAt(coords.x);
+                    viewList.add(currentRowColumnView);
+                    startAtY--;
+                }
+                break;
+            case LEFTTORIGHT:
+                int startAtX = 0;
+                int endX = coords.x;
+                while (startAtX <= endX){
+                    TableRow currentRow = (TableRow)tableLayout.getChildAt(coords.y);
+                    ImageView currentRowColumnView = (ImageView)currentRow.getChildAt(startAtX);
+                    viewList.add(currentRowColumnView);
+                    startAtX++;
+                }
+                break;
+            case RIGHTTOLEFT:
+                startAtX = amountColumns - 1;
+                endX = coords.x;
+                while (startAtX >= endX){
+                    TableRow currentRow = (TableRow)tableLayout.getChildAt(coords.y);
+                    ImageView currentRowColumnView = (ImageView)currentRow.getChildAt(startAtX);
+                    viewList.add(currentRowColumnView);
+                    startAtX--;
+                }
+                break;
+        }
+        return viewList;
     }
 
     //TODO: Linken aan redraw van deze view, niet aan windowfocusedchanged?

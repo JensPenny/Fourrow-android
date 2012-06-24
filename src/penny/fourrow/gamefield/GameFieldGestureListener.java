@@ -1,4 +1,4 @@
-package penny.fourrow.viewlogic;
+package penny.fourrow.gamefield;
 
 import android.graphics.Point;
 import android.view.GestureDetector;
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  * Time: 21:05
  * To change this template use File | Settings | File Templates.
  */
-public class TableLayoutGestureListener implements GestureDetector.OnGestureListener {
+public class GameFieldGestureListener implements GestureDetector.OnGestureListener {
 
     private static final int SWIPE_MIN_DISTANCE = 120;
     private static final int SWIPE_MAX_OFF_PATH = 250;
@@ -27,7 +27,7 @@ public class TableLayoutGestureListener implements GestureDetector.OnGestureList
     private Logger log = Logger.getLogger("GestureLogger");
     private int pixelsPerCell = 0; //Amount of pixels one cell has - width and height should be the same
 
-    public TableLayoutGestureListener(GameFieldView gameField){
+    public GameFieldGestureListener(GameFieldView gameField){
         this.gameField = gameField;
         recalculateRelativeCellSize();
     }
@@ -87,7 +87,7 @@ public class TableLayoutGestureListener implements GestureDetector.OnGestureList
                     firstEncounteredPoint = gameField.getFirstEncounteredPoint(row, Direction.LEFTTORIGHT);
                     if (firstEncounteredPoint.x >= 1){
                         firstEncounteredPoint.x -= 1;
-                        GameController.INSTANCE.playerMakesMove(firstEncounteredPoint);
+                        GameController.INSTANCE.playerMakesMove(firstEncounteredPoint, Direction.LEFTTORIGHT);
                     }
                 }else
                 {
@@ -97,7 +97,7 @@ public class TableLayoutGestureListener implements GestureDetector.OnGestureList
                     firstEncounteredPoint = gameField.getFirstEncounteredPoint(row, Direction.RIGHTTOLEFT);
                     firstEncounteredPoint.x += 1;
                     if (firstEncounteredPoint.x < 9){ //Test of dit punt op de border ligt -> TODO: refactor
-                        GameController.INSTANCE.playerMakesMove(firstEncounteredPoint);
+                        GameController.INSTANCE.playerMakesMove(firstEncounteredPoint, Direction.RIGHTTOLEFT);
                     }
                 }
             }else{
@@ -108,7 +108,7 @@ public class TableLayoutGestureListener implements GestureDetector.OnGestureList
                     firstEncounteredPoint = gameField.getFirstEncounteredPoint(column, Direction.DOWNWARDS);
                     firstEncounteredPoint.y -= 1;
                     if(firstEncounteredPoint.y >= 0){
-                        GameController.INSTANCE.playerMakesMove(firstEncounteredPoint);
+                        GameController.INSTANCE.playerMakesMove(firstEncounteredPoint, Direction.DOWNWARDS);
                     }
                 }else {
                     log.info("BotToTop swipe");
@@ -117,7 +117,7 @@ public class TableLayoutGestureListener implements GestureDetector.OnGestureList
                     firstEncounteredPoint = gameField.getFirstEncounteredPoint(column, Direction.UPWARDS);
                     firstEncounteredPoint.y += 1;
                     if (firstEncounteredPoint.y < 9){
-                        GameController.INSTANCE.playerMakesMove(firstEncounteredPoint);
+                        GameController.INSTANCE.playerMakesMove(firstEncounteredPoint, Direction.UPWARDS);
                     }
                 }
 

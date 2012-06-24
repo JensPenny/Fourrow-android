@@ -10,6 +10,6 @@ public interface IGameControl {
 	public void addPlayer(Player player);
 	public void removePlayer(Player player);
 	
-	public void playerMakesMove(Point coords); //The current player makes a move
+	public void playerMakesMove(Point coords, Direction direction); //The current player makes a move
 
 }
